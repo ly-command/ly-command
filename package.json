@@ -1,0 +1,27 @@
+{
+  "name": "ly-command",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start:dev": "nodemon",
+    "start": "npm run build && node build/index.js",
+    "build": "rimraf ./build && tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "appdata-path": "^1.0.0",
+    "commander": "^11.1.0",
+    "fast-glob": "^3.3.2",
+    "rimraf": "^5.0.5",
+    "terminal-kit": "^3.0.1",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@types/terminal-kit": "^2.5.6",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2"
+  }
+}
