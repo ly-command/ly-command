@@ -18,9 +18,11 @@ const registerCommands = async () => {
   for (const entry of entries) {
     const { default: command } = require(entry);
     if (command) command(program);
-    else console.log(`Command ${entry} does not export a default function`);
+    else Log.error(`Command ${entry} does not export a default function`);
   }
-  Log.info("Commands registered \n");
+
+  program.parse(process.argv);
+  Log.debug("Commands registered \n");
 };
 
 export default registerCommands;

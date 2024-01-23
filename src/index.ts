@@ -1,9 +1,9 @@
-import { terminal } from "terminal-kit";
+#! /usr/bin/env node
 import registerCommands from "./registerCommands";
-
+import { Log } from "./utils";
 const bootstrap = async () => {
   await registerCommands();
-  terminal.red("🚀🚀🚀 App started 🚀🚀🚀\n");
+  Log.success("🚀🚀🚀 App started 🚀🚀🚀\n");
 };
 
 bootstrap();

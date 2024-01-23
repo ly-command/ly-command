@@ -1,9 +1,13 @@
 {
   "name": "ly-command",
   "version": "1.0.0",
-  "description": "",
+  "description": "a command line tool for ly",
+  "bin": {
+    "ly": "node ./build/index.js"
+  },
   "scripts": {
     "start:dev": "nodemon",
+    "start:debug": "cross-env NODE_ENV=debug npm run start",
     "start": "npm run build && node build/index.js",
     "build": "rimraf ./build && tsc"
   },
@@ -21,6 +25,7 @@
   "devDependencies": {
     "@types/node": "^20.11.5",
     "@types/terminal-kit": "^2.5.6",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2"
   }

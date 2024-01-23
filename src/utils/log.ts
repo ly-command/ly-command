@@ -1,4 +1,6 @@
 import { terminal } from "terminal-kit";
+
+const isDebug = process.env.NODE_ENV === "debug";
 export class Log {
   static readonly name = "ly";
   static get prefix() {
@@ -15,5 +17,9 @@ export class Log {
   }
   static warning(message: string) {
     terminal.yellow(Log.prefix + message);
+  }
+  static debug(message: string) {
+    if (!isDebug) return;
+    terminal.magenta(Log.prefix + " debug " + message);
   }
 }
