@@ -1,9 +1,9 @@
 {
   "name": "ly-command",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "a command line tool for ly",
   "bin": {
-    "ly": "node ./build/index.js"
+    "ly": "./build/index.js"
   },
   "main": "./build/index.js",
   "scripts": {
@@ -12,8 +12,12 @@
     "start": "npm run build && node build/index.js",
     "build": "rimraf ./build && tsc"
   },
-  "author": "",
+  "author": "liyao",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liyao1520/ly-command"
+  },
   "dependencies": {
     "@cspotcode/zx": "^6.1.2",
     "@types/node": "^20.11.5",
@@ -32,5 +36,8 @@
     "cross-env": "^7.0.3",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2"
-  }
+  },
+  "files": [
+    "build"
+  ]
 }
