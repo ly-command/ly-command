@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readdirSync } from "fs";
 import { resolve, parse } from "path";
 import { rimraf } from "rimraf";
-import { copy } from "fs-extra";
+import { copy, mkdir } from "fs-extra";
 import { Log } from "../utils";
 interface ICommandInfo {
   name: string;
@@ -52,6 +52,7 @@ export class UserCommands {
     return commands;
   }
   public async clearAllCommands() {
-    await rimraf(this.USER_COMMAND_DIR + "/*");
+    await rimraf(this.USER_COMMAND_DIR);
+    await mkdir(this.USER_COMMAND_DIR);
   }
 }
