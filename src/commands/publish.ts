@@ -4,6 +4,7 @@ import { resolve } from "path";
 import { existsSync } from "fs";
 import { writeFile, mkdir } from "fs/promises";
 import { rimraf } from "rimraf";
+import rootStore from "../store";
 
 const action = async () => {
   const cwd = process.cwd();
@@ -15,7 +16,10 @@ const action = async () => {
   }
   const pkg = require(pkgPath);
   const mainPath = pkg.main;
-  Log.info(`mainPath: ${mainPath}`);
+  const cmdName = pkg.name;
+  if (!cmdName) {
+    return Log.error("package.json name is missing");
+  }
   if (!mainPath) {
     return Log.error("package.json does not contain a main field");
   } else {
@@ -43,6 +47,7 @@ const action = async () => {
       await writeFile(resolve(DIST_DIR, "./", name), asset.source, "binary");
       Log.info(`write ${name} finished`);
     }
+    await rootStore.UserCommands.putCommand(cmdName, DIST_DIR);
     Log.success("publish finished");
   }
 };
