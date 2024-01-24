@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import rootStore from "../store";
-import { Log } from "../utils";
+import { Log, quote, unQuoteStr } from "../utils";
 import { $ } from "@cspotcode/zx";
 
 const run = (program: Command) => {
@@ -19,11 +19,13 @@ const run = (program: Command) => {
       }
       const { execJsFilePath } = command;
       // 不显示命令
-      $.verbose = false;
+      // $.verbose = false;
       // 自定义转移函数，防止参数被转义
-      $.quote = (str) => str;
+      $.quote = quote;
       // 显示输出
-      await $`node ${execJsFilePath} ${args.join(" ")}`.pipe(process.stdout);
+      await $`node ${execJsFilePath} ${unQuoteStr(args.join(" "))}`.pipe(
+        process.stdout
+      );
     });
 };
 
