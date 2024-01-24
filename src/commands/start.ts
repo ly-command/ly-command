@@ -5,8 +5,9 @@ import { $ } from "@cspotcode/zx";
 const start = (program: Command) => {
   program.command("start").action(async () => {
     const { distDir } = await build({ log: false });
+    const args = process.argv.slice(3);
     const jsPath = resolve(distDir, "./index.js");
-    await $`node ${jsPath}`;
+    await $`node ${jsPath} ${args.join(" ")}`;
   });
 };
 

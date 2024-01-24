@@ -9,6 +9,7 @@ const run = (program: Command) => {
     .description("run command")
     .argument("<commandName>", "command name")
     .action(async (commandName) => {
+      const args = process.argv.slice(4);
       const command = await rootStore.UserCommands.getCommandByName(
         commandName
       );
@@ -19,7 +20,7 @@ const run = (program: Command) => {
       // 不显示命令
       $.verbose = false;
       // 显示输出
-      await $`node ${execJsFilePath}`.pipe(process.stdout);
+      await $`node ${execJsFilePath} ${args.join(" ")}`.pipe(process.stdout);
     });
 };
 
