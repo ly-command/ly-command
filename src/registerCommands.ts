@@ -14,7 +14,8 @@ const createProgram = () => {
 
 const registerCommands = async () => {
   const program = createProgram();
-  const entries = globSync(path.resolve(__dirname, "./commands/*.ts"));
+
+  const entries = globSync([path.resolve(__dirname, "./commands/*.{ts,js}")]);
   for (const entry of entries) {
     const { default: command } = require(entry);
     if (command) command(program);

@@ -1,25 +1,33 @@
 import { terminal } from "terminal-kit";
+import { isString } from "./";
 
 const isDebug = process.env.NODE_ENV === "debug";
 export class Log {
-  static readonly name = "ly";
+  static readonly appName = "ly";
   static get prefix() {
-    return `[${Log.name}] `;
+    return `[${Log.appName}] `;
   }
-  static error(message: string) {
-    terminal.red(Log.prefix + message);
+  private static format(message: any, _prefix?: string) {
+    const prefix = _prefix ?? Log.prefix;
+    const content = isString(message)
+      ? message
+      : JSON.stringify(message, null, 2);
+    return prefix + content + "\n";
   }
-  static info(message: string) {
-    terminal.blue(Log.prefix + message);
+  static error(message: any) {
+    terminal.red(this.format(message));
   }
-  static success(message: string) {
-    terminal.green(Log.prefix + message);
+  static info(message: any) {
+    terminal.blue(this.format(message));
   }
-  static warning(message: string) {
-    terminal.yellow(Log.prefix + message);
+  static success(message: any) {
+    terminal.green(this.format(message));
   }
-  static debug(message: string) {
+  static warning(message: any) {
+    terminal.yellow(this.format(message));
+  }
+  static debug(message: any) {
     if (!isDebug) return;
-    terminal.magenta(Log.prefix + " debug " + message);
+    terminal.magenta(this.format(message, "[debug] "));
   }
 }
