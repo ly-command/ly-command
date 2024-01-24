@@ -12,7 +12,6 @@
     "start": "npm run build && node build/index.js",
     "build": "rimraf ./build && tsc"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {

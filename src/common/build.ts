@@ -20,6 +20,7 @@ export const build = async (
   const pkg = require(pkgPath);
   const mainPath = pkg.main;
   const cmdName = pkg.name;
+  const nccOptions = pkg.ly ?? {};
   if (!cmdName) {
     throw new Error("package.json name is missing");
   }
@@ -34,7 +35,8 @@ export const build = async (
       );
     }
     const ncc = require("@vercel/ncc");
-    const options = { sourceMap: true, quiet: !log };
+    const options = { sourceMap: true, quiet: !log, ...nccOptions };
+
     const { code, map, assets } = await ncc(main, options);
     if (existsSync(DIST_DIR)) {
       await rimraf(DIST_DIR);
