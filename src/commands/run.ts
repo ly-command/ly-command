@@ -8,6 +8,7 @@ const run = (program: Command) => {
     .command("run")
     .description("run command")
     .argument("<commandName>", "command name")
+    .allowUnknownOption()
     .action(async (commandName) => {
       const args = process.argv.slice(4);
       const command = await rootStore.UserCommands.getCommandByName(
@@ -19,6 +20,8 @@ const run = (program: Command) => {
       const { execJsFilePath } = command;
       // 不显示命令
       $.verbose = false;
+      // 自定义转移函数，防止参数被转义
+      $.quote = (str) => str;
       // 显示输出
       await $`node ${execJsFilePath} ${args.join(" ")}`.pipe(process.stdout);
     });
