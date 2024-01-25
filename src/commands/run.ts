@@ -19,7 +19,7 @@ const run = (program: Command) => {
       }
       const { execJsFilePath } = command;
       // 不显示命令
-      // $.verbose = false;
+      $.verbose = false;
       // 自定义转移函数，防止参数被转义
       $.quote = quote;
       // 显示输出

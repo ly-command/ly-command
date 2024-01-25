@@ -1,6 +1,6 @@
 {
   "name": "ly-command",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "a command line tool for ly",
   "bin": {
     "ly": "./build/index.js"
