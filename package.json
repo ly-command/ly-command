@@ -1,12 +1,13 @@
 {
   "name": "ly-command",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "a command line tool for ly",
   "bin": {
-    "ly": "./build/index.js"
+    "ly": "build/index.js"
   },
   "main": "./build/index.js",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "start:dev": "nodemon",
     "start:debug": "cross-env NODE_ENV=debug npm run start",
     "start": "npm run build && node build/index.js",
@@ -16,7 +17,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/liyao1520/ly-command"
+    "url": "git+https://github.com/liyao1520/ly-command.git"
   },
   "dependencies": {
     "@cspotcode/zx": "^6.1.2",
