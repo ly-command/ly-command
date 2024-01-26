@@ -1,5 +1,5 @@
 import { getAppDataPath } from "appdata-path";
-import { existsSync, mkdir, mkdirSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 import { UserCommands } from "./userCommands";
 
