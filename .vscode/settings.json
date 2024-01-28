@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["appdata"]
+  "cSpell.words": ["appdata"],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  }
 }
