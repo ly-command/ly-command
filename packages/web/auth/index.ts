@@ -1,7 +1,8 @@
-import NextAuth from "next-auth";
+import NextAuth, { Session } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prisma";
+import { AdapterUser } from "@auth/core/adapters";
 
 export const { handlers, auth } = NextAuth({
   pages: {},
@@ -13,7 +14,8 @@ export const { handlers, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    session({ session, user }) {
+    // fix: build type error
+    session({ session, user }: any) {
       console.log(user);
       if (session.user) {
         session.user.id = user.id;
