@@ -2,6 +2,7 @@ import { Log } from "../utils";
 import { resolve } from "path";
 import { existsSync } from "fs";
 import { writeFile, mkdir } from "fs/promises";
+import { ensureFile } from "fs-extra";
 import { rimraf } from "rimraf";
 interface Options {
   log?: boolean;
@@ -49,7 +50,14 @@ export const build = async (
     log && Log.info("write index.js.map finished");
     for (const name in assets) {
       const asset = assets[name];
-      await writeFile(resolve(DIST_DIR, "./", name), asset.source, "binary");
+      const filePath = resolve(DIST_DIR, "./", name);
+      try {
+        // 确保文件存在
+        await ensureFile(filePath);
+        await writeFile(filePath, asset.source, "binary");
+      } catch (e) {
+        Log.error(e);
+      }
       log && Log.info(`write ${name} finished`);
     }
   }

@@ -1,5 +1,5 @@
 import { terminal } from "terminal-kit";
-import { isString } from "./";
+import { isString } from ".";
 
 const isDebug = process.env.NODE_ENV === "debug";
 export class Log {
