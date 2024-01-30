@@ -13,8 +13,8 @@ node_modules
 /packages/cmdHub/out/
 
 # production
-build
-dist
+**/build
+**/dist
 
 # misc
 .DS_Store
@@ -26,10 +26,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
-
+**/.env*.local
+**/.env
 # vercel
-.vercel
+**/.vercel
 
 # typescript
 *.tsbuildinfo
