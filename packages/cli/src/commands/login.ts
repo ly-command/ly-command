@@ -42,10 +42,11 @@ const startServer = () => {
   };
   const listener = () => {
     server.removeListener("error", onError);
-    console.log(`server start at ${port}`);
-    import("open").then(({ default: open }) =>
-      open(API_GATEWAY + `/cli/login?callback=http://localhost:${port}`)
-    );
+    import("open").then(({ default: open }) => {
+      const url = API_GATEWAY + `/cli/login?callback=http://localhost:${port}`;
+      Log.success(`open url login:  ${url}`);
+      open(url);
+    });
   };
   server.listen(port, listener);
   server.on("error", onError);

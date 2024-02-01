@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import ProgressBar from "progress";
 import fs from "fs";
 import { Command } from "commander";
@@ -9,7 +8,7 @@ import AdmZip from "adm-zip";
 import rootStore from "../store";
 import { terminal } from "terminal-kit";
 import { parse } from "parse-package-name";
-const fetchCommand = (commandName: string) => {
+const fetchCommand = (commandName: string): Promise<any> => {
   return fetch(`${API_GATEWAY}/api/command/${commandName}`).then((res) =>
     res.json()
   );
@@ -18,24 +17,8 @@ const fetchCommand = (commandName: string) => {
 const downloadFile = async (url: string, destination: string) => {
   const response = await fetch(url);
   const totalBytes = parseInt(response.headers.get("content-length") || "0");
-  const progressBar = new ProgressBar("Downloading [:bar] :percent :etas", {
-    width: 40,
-    complete: "=",
-    incomplete: " ",
-    renderThrottle: 1,
-    total: totalBytes,
-    clear: false,
-  });
 
   const fileStream = fs.createWriteStream(destination);
-
-  response.body.pipe(fileStream);
-
-  response.body.on("data", (chunk: Buffer) => {
-    progressBar.tick(chunk.length);
-  });
-
-  response.body.on("end", () => {});
 };
 
 const install = (program: Command) => {

@@ -1,6 +1,6 @@
 {
-  "name": "@ly-command/cli",
-  "version": "0.2.2",
+  "name": "ly-command",
+  "version": "0.2.8",
   "description": "a command line tool for ly",
   "bin": {
     "ly": "build/index.js"
@@ -32,7 +32,8 @@
     "sanitize-filename": "^1.6.3",
     "terminal-kit": "^3.0.1",
     "typescript": "^5.3.3",
-    "valid-filename": "^4.0.0"
+    "parse-package-name": "^1.0.0",
+    "open": "^10.0.3"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.5",
@@ -44,10 +45,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.1",
     "esbuild-node-tsc": "^2.0.5",
-    "node-fetch": "2",
     "nodemon": "^3.0.3",
-    "open": "^10.0.3",
-    "parse-package-name": "^1.0.0",
     "ts-node": "^10.9.2"
   },
   "files": [

@@ -1,7 +1,8 @@
 "use client";
 import { Link, Spinner } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 import { useAsyncEffect } from "ahooks";
 import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
@@ -15,11 +16,12 @@ function isValidUrl(url: string | null): url is string {
     return false;
   }
 }
-export default function Page() {
-  const searchParams = useSearchParams();
+export default function Page({ searchParams }: any) {
   const { data, status } = useSession();
-  const callback = searchParams.get("callback");
+  const callback = searchParams["callback"] ?? "";
+  console.log(callback);
   const router = useRouter();
+
   const [isLogin, setIsLogin] = useState(false);
   const [isError, setIsError] = useState(false);
   useEffect(() => {

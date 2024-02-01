@@ -5,7 +5,7 @@ import { writeFile, mkdir } from "fs/promises";
 import { copy, ensureFile } from "fs-extra";
 import { rimraf } from "rimraf";
 import { parse } from "parse-package-name";
-import isValidFilename from "valid-filename";
+import { isValidFilename } from "../utils/file";
 interface Options {
   log?: boolean;
 }
