@@ -2,14 +2,14 @@ import { Log } from "../utils";
 import { resolve } from "path";
 import { existsSync } from "fs";
 import { writeFile, mkdir } from "fs/promises";
-import { ensureFile } from "fs-extra";
+import { copy, ensureFile } from "fs-extra";
 import { rimraf } from "rimraf";
 interface Options {
   log?: boolean;
 }
 export const build = async (
   options?: Options
-): Promise<{ cmdName: string; distDir: string }> => {
+): Promise<{ cmdName: string; distDir: string; pkg: Record<string, any> }> => {
   const { log = true } = options || {};
 
   const cwd = process.cwd();
@@ -58,11 +58,13 @@ export const build = async (
       } catch (e) {
         Log.error(e);
       }
+      await copy(pkgPath, resolve(DIST_DIR, "./package.json"));
       log && Log.info(`write ${name} finished`);
     }
   }
   return {
     cmdName,
+    pkg,
     distDir: DIST_DIR,
   };
 };

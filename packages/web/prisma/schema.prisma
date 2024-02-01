@@ -32,7 +32,7 @@ model Command {
   authorId    String?  @map("author_id")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-  zipUrl      String   @map("zip_url")
+  sourceId    String   @map("sourceId")
 
   @@map("command")
 }

@@ -5,7 +5,7 @@ const isDebug = process.env.NODE_ENV === "debug";
 export class Log {
   static readonly appName = "ly";
   static get prefix() {
-    return ``;
+    return `> `;
   }
   private static format(message: any, _prefix?: string) {
     const prefix = _prefix ?? Log.prefix;
