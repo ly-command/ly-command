@@ -3,7 +3,8 @@ import { Link, Spinner } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAsyncEffect } from "ahooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { signIn } from "next-auth/react";
 import confetti from "canvas-confetti";
 function isValidUrl(url: string | null): url is string {
   if (!url) return false;
@@ -16,12 +17,18 @@ function isValidUrl(url: string | null): url is string {
 }
 export default function Page() {
   const searchParams = useSearchParams();
-  const { data } = useSession();
+  const { data, status } = useSession();
   const callback = searchParams.get("callback");
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
   const [isError, setIsError] = useState(false);
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      signIn("github", { callbackUrl: window.location.href });
+    }
+  }, [status]);
   useAsyncEffect(async () => {
+    if (status !== "authenticated") return;
     const user = data?.user;
     if (!user) return;
     if (isValidUrl(callback) && user) {
@@ -40,7 +47,7 @@ export default function Page() {
         setIsError(true);
       }
     }
-  }, [data?.user]);
+  }, [data?.user, status, callback]);
   if (isError || isLogin)
     return (
       <div className="flex flex-col items-center">
