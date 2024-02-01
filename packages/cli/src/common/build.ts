@@ -4,6 +4,8 @@ import { existsSync } from "fs";
 import { writeFile, mkdir } from "fs/promises";
 import { copy, ensureFile } from "fs-extra";
 import { rimraf } from "rimraf";
+import { parse } from "parse-package-name";
+import isValidFilename from "valid-filename";
 interface Options {
   log?: boolean;
 }
@@ -21,6 +23,17 @@ export const build = async (
   const pkg = require(pkgPath);
   const mainPath = pkg.main;
   const cmdName = pkg.name;
+
+  try {
+    parse(cmdName);
+  } catch (e) {
+    throw new Error("invalid package name");
+  }
+
+  if (!isValidFilename(cmdName)) {
+    throw new Error("invalid package name");
+  }
+
   const nccOptions = pkg.ly ?? {};
   if (!cmdName) {
     throw new Error("package.json name is missing");

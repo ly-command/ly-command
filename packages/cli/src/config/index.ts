@@ -1,1 +1,1 @@
-export const API_GATEWAY = "http://localhost:3000";
+export const API_GATEWAY = "https://ly-command.vercel.app/";

@@ -8,7 +8,7 @@ interface ICommandInfo {
   execJsFilePath: string;
 }
 export class UserCommands {
-  private readonly USER_COMMAND_DIR: string;
+  public readonly USER_COMMAND_DIR: string;
   constructor(private readonly LY_COMMAND_DIR: string) {
     this.USER_COMMAND_DIR = resolve(this.LY_COMMAND_DIR, "./commands");
     if (!existsSync(this.USER_COMMAND_DIR)) {
