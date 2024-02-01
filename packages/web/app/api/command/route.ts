@@ -2,13 +2,16 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import semver from "semver";
 import { NextRequest } from "next/server";
-import { commandParams } from "@/lib/zod";
+import { createCommandParams } from "@/lib/zod";
+import { isString } from "lodash-es";
 
 export const GET = async (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams;
   const page = Number(searchParams.get("page")) || 1;
   const pageSize = Number(searchParams.get("pageSize")) || 10;
   const search = searchParams.get("search") || "";
+  const hot = isString(searchParams.get("hot"));
+
   const commands = await prisma.command.findMany({
     where: {
       commandName: {
@@ -17,6 +20,7 @@ export const GET = async (req: NextRequest) => {
     },
     skip: (page - 1) * pageSize,
     take: pageSize,
+    orderBy: [hot ? { downloadCount: "desc" } : {}, { createdAt: "desc" }],
   });
   return Response.json({ success: true, data: commands });
 };
@@ -34,7 +38,7 @@ export const POST = async (req: Request) => {
     );
   }
 
-  const result = commandParams.safeParse(await req.json());
+  const result = createCommandParams.safeParse(await req.json());
 
   if (!result.success) {
     return Response.json(

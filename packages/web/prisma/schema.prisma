@@ -24,15 +24,16 @@ model User {
 }
 
 model Command {
-  id          String   @id @default(uuid())
-  version     String
-  packageJSON Json     @map("package_json")
-  commandName String   @map("command_name")
-  author      User?    @relation(fields: [authorId], references: [id])
-  authorId    String?  @map("author_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  sourceId    String   @map("sourceId")
+  id            String   @id @default(uuid())
+  version       String
+  packageJSON   Json     @map("package_json")
+  commandName   String   @map("command_name")
+  author        User?    @relation(fields: [authorId], references: [id])
+  authorId      String?  @map("author_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  sourceId      String   @map("sourceId")
+  downloadCount Int      @default(0) @map("download_count")
 
   @@map("command")
 }

@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-export const commandParams = z.object({
+export const createCommandParams = z.object({
   commandName: z.string(),
   packageJSON: z.string(),
   version: z.string(),
   sourceId: z.string(),
 });
 
-export type CommandParams = z.infer<typeof commandParams>;
+export type CreateCommandParams = z.infer<typeof createCommandParams>;
