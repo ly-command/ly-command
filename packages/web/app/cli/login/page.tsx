@@ -2,7 +2,6 @@
 import { Link, Spinner } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
 import { useAsyncEffect } from "ahooks";
 import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
@@ -16,6 +15,10 @@ function isValidUrl(url: string | null): url is string {
     return false;
   }
 }
+
+const getCookies = () => {
+  return fetch("/api/cookie").then((res) => res.text());
+};
 export default function Page({ searchParams }: any) {
   const { data, status } = useSession();
   const callback = searchParams["callback"] ?? "";
@@ -24,6 +27,7 @@ export default function Page({ searchParams }: any) {
 
   const [isLogin, setIsLogin] = useState(false);
   const [isError, setIsError] = useState(false);
+
   useEffect(() => {
     if (status === "unauthenticated") {
       signIn("github", { callbackUrl: window.location.href });
@@ -37,7 +41,9 @@ export default function Page({ searchParams }: any) {
       try {
         const res = await fetch(callback + `?user=${data.user.name ?? ""}`, {
           method: "POST",
-          credentials: "include",
+          headers: {
+            auth: await getCookies(),
+          },
         }).then((res) => res.text());
         if (res === "ok") {
           setIsLogin(true);

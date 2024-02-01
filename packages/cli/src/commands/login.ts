@@ -17,10 +17,12 @@ const startServer = () => {
     res.setHeader("Access-Control-Allow-Credentials", "true");
 
     if (req.method === "POST") {
-      const cookie = headers["cookie"];
+      const cookie = headers["auth"];
       const parsedUrl = parse(req.url ?? "", true);
       const userName = parsedUrl.query.user;
-
+      if (!cookie) {
+        return Log.error("login error");
+      }
       res.end("ok", () => {
         // 获取查询参数对象
         rootStore.UserCookie.setConfig({ cookie });

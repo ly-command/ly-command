@@ -9,7 +9,7 @@ import sanitize from "sanitize-filename";
 
 import { readFileSync } from "fs-extra";
 
-const checkLogin = async (cookie: string) => {
+const checkLogin = async (cookie: string = "none") => {
   // check login
   const res = await fetch(API_GATEWAY + "/api/auth/session", {
     headers: {
@@ -75,11 +75,14 @@ const uploadFile = async (
 
 const action = async (options: { remote: boolean }) => {
   const { remote = false } = options;
+
   if (remote) {
     // publish to remote
     Log.debug("publish to remote");
     const { cookie } = rootStore.UserCookie.getConfig();
+
     const isLogin = await checkLogin(cookie);
+
     if (isLogin) {
       // login success
       const { cmdName, distDir, pkg } = await build();
