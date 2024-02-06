@@ -2,14 +2,16 @@ import { Log } from "../utils";
 import { resolve } from "path";
 import { existsSync } from "fs";
 import { writeFile, mkdir } from "fs/promises";
-import { ensureFile } from "fs-extra";
+import { copy, ensureFile } from "fs-extra";
 import { rimraf } from "rimraf";
+import { parse } from "parse-package-name";
+import { isValidFilename } from "../utils/file";
 interface Options {
   log?: boolean;
 }
 export const build = async (
   options?: Options
-): Promise<{ cmdName: string; distDir: string }> => {
+): Promise<{ cmdName: string; distDir: string; pkg: Record<string, any> }> => {
   const { log = true } = options || {};
 
   const cwd = process.cwd();
@@ -21,6 +23,17 @@ export const build = async (
   const pkg = require(pkgPath);
   const mainPath = pkg.main;
   const cmdName = pkg.name;
+
+  try {
+    parse(cmdName);
+  } catch (e) {
+    throw new Error("invalid package name");
+  }
+
+  if (!isValidFilename(cmdName)) {
+    throw new Error("invalid package name");
+  }
+
   const nccOptions = pkg.ly ?? {};
   if (!cmdName) {
     throw new Error("package.json name is missing");
@@ -58,11 +71,13 @@ export const build = async (
       } catch (e) {
         Log.error(e);
       }
+      await copy(pkgPath, resolve(DIST_DIR, "./package.json"));
       log && Log.info(`write ${name} finished`);
     }
   }
   return {
     cmdName,
+    pkg,
     distDir: DIST_DIR,
   };
 };
