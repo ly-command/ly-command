@@ -23,6 +23,7 @@ const registerCommands = async () => {
   }
 
   program.parse(process.argv);
+
   Log.debug("Commands registered \n");
 };
 
