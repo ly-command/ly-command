@@ -5,9 +5,8 @@ import {
   CardFooter,
   CardHeader,
   User,
-  Snippet,
 } from "@nextui-org/react";
-import { CopyIcon } from "@nextui-org/shared-icons";
+
 import { User as Author } from "@prisma/client";
 import { MdDownload, MdOutlineUpdate } from "react-icons/md";
 import dayjs from "dayjs";
@@ -19,8 +18,8 @@ import Link from "next/link";
 dayjs.extend(relativeTime);
 
 interface CommandItem {
-  _sum: { downloadCount: number };
-  _max: { createdAt: string };
+  _sum?: { downloadCount: number };
+  _max?: { createdAt: string };
   commandName: string;
   authorId?: string;
   author?: Author;
@@ -57,10 +56,10 @@ const Commands = async () => {
               />
               <div className="flex items-center text-small text-zinc-400">
                 <MdDownload />
-                <span>{formatDownloadNum(command._sum.downloadCount)}</span>
+                <span>{formatDownloadNum(command._sum?.downloadCount)}</span>
                 <MdOutlineUpdate className="ml-2" />
                 <span>
-                  {dayjs(command._max.createdAt).locale("zh-cn").fromNow()}
+                  {dayjs(command._max?.createdAt).locale("zh-cn").fromNow()}
                 </span>
               </div>
             </CardFooter>

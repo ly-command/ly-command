@@ -1,4 +1,4 @@
-export function formatDownloadNum(num: number) {
+export function formatDownloadNum(num = 0) {
   // 将数字转为字符串
   const strNum = num.toString();
   // 如果数字超过 1000
