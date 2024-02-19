@@ -26,6 +26,7 @@ interface ICommand {
   version: string;
   packageJSON: any;
   sourceId: string;
+  readmeContent: string;
 }
 const publishCommandToRemote = async (
   command: ICommand,
@@ -85,7 +86,7 @@ const action = async (options: { remote: boolean }) => {
 
     if (isLogin) {
       // login success
-      const { cmdName, distDir, pkg } = await build();
+      const { cmdName, distDir, pkg, readmeContent } = await build();
       const zip = new AdmZip();
       zip.addLocalFolder(distDir);
       const filename = sanitize(cmdName, { replacement: "-" }) + ".zip";
@@ -107,6 +108,7 @@ const action = async (options: { remote: boolean }) => {
                 version: pkg.version,
                 packageJSON: JSON.stringify(pkg),
                 sourceId: data.name,
+                readmeContent,
               },
               cookie
             );

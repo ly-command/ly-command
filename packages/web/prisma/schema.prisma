@@ -33,6 +33,7 @@ model Command {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
   sourceId      String   @map("sourceId")
+  readmeContent String   @map("readme_content")
   downloadCount Int      @default(0) @map("download_count")
 
   @@map("command")
