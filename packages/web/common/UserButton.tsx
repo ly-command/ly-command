@@ -3,6 +3,7 @@ import { signIn, useSession } from "next-auth/react";
 
 import { forwardRef } from "react";
 
+// eslint-disable-next-line react/display-name
 const UserButton = forwardRef((props, ref: any) => {
   const session = useSession();
   if (session.status === "loading") return <Avatar icon={null}></Avatar>;

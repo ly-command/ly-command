@@ -143,6 +143,9 @@ importers:
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
+      prisma-soft-delete-middleware:
+        specifier: ^1.3.1
+        version: 1.3.1(@prisma/client@5.8.1)
       react:
         specifier: ^18
         version: 18.2.0
@@ -2125,6 +2128,10 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.16.0
+
+  /@open-draft/deferred-promise@2.2.0:
+    resolution: {integrity: sha512-CecwLWx3rhxVQF6V4bAgPS5t+So2sTbPgAzafKkVizyi7tlwpcFpdFqq+wqF2OwNBmqFuu6tOyouTuxgpMfzmA==}
+    dev: false
 
   /@panva/hkdf@1.1.1:
     resolution: {integrity: sha512-dhPeilub1NuIG0X5Kvhh9lH4iW3ZsHlnzwgwbOlgwQ2wG1IqFzsgHqmKPk3WzsdWAeaxKJxgM0+W433RmN45GA==}
@@ -5953,7 +5960,6 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
@@ -7109,6 +7115,25 @@ packages:
 
   /pretty-format@3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
+
+  /prisma-nested-middleware@4.0.0(@prisma/client@5.8.1):
+    resolution: {integrity: sha512-WSx0nl7KNXEzGaNC87fuDBOdAjj3V6um/JoQUo24PaMzMy8tvOYfb2Mw25OZhnrMXNTBhqgk4rJTUW3CVcDsHQ==}
+    peerDependencies:
+      '@prisma/client': '*'
+    dependencies:
+      '@open-draft/deferred-promise': 2.2.0
+      '@prisma/client': 5.8.1(prisma@5.8.1)
+      lodash: 4.17.21
+    dev: false
+
+  /prisma-soft-delete-middleware@1.3.1(@prisma/client@5.8.1):
+    resolution: {integrity: sha512-oQ2Ba8wb23ho6PqMXkOSTQTXNKouLmZuILYDHrnKk1Ui3cGIXuj9zNWyJkoaTcWHznsiAaoP1Oy8ytDhwQNQqA==}
+    peerDependencies:
+      '@prisma/client': '*'
+    dependencies:
+      '@prisma/client': 5.8.1(prisma@5.8.1)
+      prisma-nested-middleware: 4.0.0(@prisma/client@5.8.1)
+    dev: false
 
   /prisma@5.8.1:
     resolution: {integrity: sha512-N6CpjzECnUHZ5beeYpDzkt2rYpEdAeqXX2dweu6BoQaeYkNZrC/WJHM+5MO/uidFHTak8QhkPKBWck1o/4MD4A==}

@@ -15,7 +15,7 @@ import "dayjs/locale/zh-cn";
 import { Key, useCallback } from "react";
 import Link from "next/link";
 dayjs.extend(relativeTime);
-export default function CommandList({ data }: { data: Command[] }) {
+export default function CommandVersionList({ data }: { data: Command[] }) {
   const columns = [
     {
       key: "version",

@@ -1,5 +1,10 @@
 import Commands from "@/components/commands";
 import { Snippet } from "@nextui-org/react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ly-command",
+};
 
 export default function Home() {
   return (

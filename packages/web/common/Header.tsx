@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { HiCommandLine } from "react-icons/hi2";
 import { useEffect, useState } from "react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import UserButton from "./UserButton";
 import useMounted from "@/hooks/useMounted";
@@ -19,6 +19,9 @@ const Header = () => {
   const { setTheme, theme } = useTheme();
   const [isDark, setIsDark] = useState(false);
   const { isMounted } = useMounted();
+  const session = useSession();
+  const userName = session.data?.user?.name;
+
   useEffect(() => {
     setIsDark(theme === "dark");
   }, [theme]);
@@ -47,6 +50,9 @@ const Header = () => {
               <UserButton />
             </DropdownTrigger>
             <DropdownMenu>
+              <DropdownItem key={"user"} href={`/user/${userName}`}>
+                个人中心
+              </DropdownItem>
               <DropdownItem
                 key={"logout"}
                 className="text-danger"

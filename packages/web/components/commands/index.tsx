@@ -1,11 +1,5 @@
 import { withBaseUrl } from "@/utils";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  User,
-} from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 
 import { User as Author } from "@prisma/client";
 import { MdDownload, MdOutlineUpdate } from "react-icons/md";
@@ -14,6 +8,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/zh-cn";
 import { formatDownloadNum } from "@/utils/number";
 import Link from "next/link";
+
+import UserComponent from "@/common/User";
 
 dayjs.extend(relativeTime);
 
@@ -36,6 +32,7 @@ const Commands = async () => {
     <div className=" grid w-full grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {data.map((command) => (
         <Link
+          key={command.commandName}
           className="mx-2  cursor-pointer md:mx-0"
           href={`/command/${command.commandName}`}
         >
@@ -47,12 +44,9 @@ const Commands = async () => {
               <div className="line-clamp-3">{command.desc}</div>
             </CardBody>
             <CardFooter className="flex justify-between">
-              <User
+              <UserComponent
+                avatar={command.author?.image}
                 name={command.author?.name}
-                avatarProps={{
-                  src: command.author?.image ?? undefined,
-                  size: "sm",
-                }}
               />
               <div className="flex items-center text-small text-zinc-400">
                 <MdDownload />
