@@ -1,28 +1,66 @@
 import { auth } from "@/auth";
-import prisma from "@/lib/prisma";
+import prisma, { User } from "@/lib/prisma";
 import semver from "semver";
 import { NextRequest } from "next/server";
 import { createCommandParams } from "@/lib/zod";
-import { isString } from "lodash-es";
-
 export const GET = async (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams;
   const page = Number(searchParams.get("page")) || 1;
   const pageSize = Number(searchParams.get("pageSize")) || 10;
   const search = searchParams.get("search") || "";
-  const hot = isString(searchParams.get("hot"));
 
-  const commands = await prisma.command.findMany({
+  const commands = await prisma.command.groupBy({
+    by: ["commandName", "authorId"],
     where: {
       commandName: {
         contains: search,
       },
     },
-    skip: (page - 1) * pageSize,
+    _sum: {
+      downloadCount: true,
+    },
+    _max: {
+      createdAt: true,
+    },
+    orderBy: {
+      _sum: {
+        downloadCount: "desc",
+      },
+    },
     take: pageSize,
-    orderBy: [hot ? { downloadCount: "desc" } : {}, { createdAt: "desc" }],
+    skip: (page - 1) * pageSize,
   });
-  return Response.json({ success: true, data: commands });
+
+  const result = await Promise.all(
+    commands.map((command) =>
+      prisma.command
+        .findFirst({
+          where: {
+            commandName: command.commandName,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          include: { author: true },
+        })
+        .then((res) => {
+          let desc = "";
+          try {
+            const pkg = JSON.parse(res?.packageJSON?.toString() || "{}");
+            desc = pkg.description;
+          } catch (e) {
+            return;
+          }
+          return Object.assign({}, command, {
+            author: res?.author,
+            latestVersion: res?.version,
+            desc,
+          });
+        }),
+    ),
+  );
+
+  return Response.json({ success: false, data: result });
 };
 
 export const POST = async (req: Request) => {
@@ -50,7 +88,8 @@ export const POST = async (req: Request) => {
     );
   }
 
-  const { commandName, packageJSON, version, sourceId } = result.data;
+  const { commandName, packageJSON, version, sourceId, readmeContent } =
+    result.data;
 
   if (semver.valid(version) === null) {
     return Response.json(
@@ -96,6 +135,7 @@ export const POST = async (req: Request) => {
       packageJSON,
       sourceId,
       authorId: session.user.id,
+      readmeContent,
     },
   });
   return Response.json({

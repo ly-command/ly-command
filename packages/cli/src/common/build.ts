@@ -1,7 +1,7 @@
 import { Log } from "../utils";
 import { resolve } from "path";
 import { existsSync } from "fs";
-import { writeFile, mkdir } from "fs/promises";
+import { writeFile, mkdir, readFile } from "fs/promises";
 import { copy, ensureFile } from "fs-extra";
 import { rimraf } from "rimraf";
 import { parse } from "parse-package-name";
@@ -9,21 +9,28 @@ import { isValidFilename } from "../utils/file";
 interface Options {
   log?: boolean;
 }
-export const build = async (
-  options?: Options
-): Promise<{ cmdName: string; distDir: string; pkg: Record<string, any> }> => {
+interface BuildResult {
+  cmdName: string;
+  distDir: string;
+  pkg: Record<string, any>;
+  readmeContent: string;
+}
+export const build = async (options?: Options): Promise<BuildResult> => {
   const { log = true } = options || {};
 
   const cwd = process.cwd();
   const DIST_DIR = resolve(cwd, "./dist");
   const pkgPath = resolve(cwd, "./package.json");
+  const readmePath = resolve(cwd, "./README.md");
   if (!existsSync(pkgPath)) {
     throw new Error("package.json not found");
   }
   const pkg = require(pkgPath);
   const mainPath = pkg.main;
   const cmdName = pkg.name;
-
+  const readmeContent = existsSync(readmePath)
+    ? await readFile(readmePath, "utf-8")
+    : "";
   try {
     parse(cmdName);
   } catch (e) {
@@ -78,6 +85,7 @@ export const build = async (
   return {
     cmdName,
     pkg,
+    readmeContent,
     distDir: DIST_DIR,
   };
 };

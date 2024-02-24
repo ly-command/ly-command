@@ -3,6 +3,7 @@
     "build-cli": "pnpm -F ly-command run build",
     "start-cli": "pnpm -F ly-command run start",
     "dev-web": "pnpm -F @ly-command/web run dev",
-    "dev-server": "pnpm -F @ly-command/server run start:dev"
+    "dev-server": "pnpm -F @ly-command/server run start:dev",
+    "build": "pnpm -F @ly-command/web run build"
   }
 }

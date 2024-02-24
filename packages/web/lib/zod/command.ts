@@ -5,6 +5,7 @@ export const createCommandParams = z.object({
   packageJSON: z.string(),
   version: z.string(),
   sourceId: z.string(),
+  readmeContent: z.string(),
 });
 
 export type CreateCommandParams = z.infer<typeof createCommandParams>;

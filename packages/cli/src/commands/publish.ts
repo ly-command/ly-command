@@ -4,9 +4,9 @@ import rootStore from "../store";
 import { build } from "../common/build";
 import { API_GATEWAY } from "../config";
 import AdmZip from "adm-zip";
-import { basename, resolve } from "path";
+import { resolve } from "path";
 import sanitize from "sanitize-filename";
-
+import { tmpdir } from "os";
 import { readFileSync } from "fs-extra";
 
 const checkLogin = async (cookie: string = "none") => {
@@ -26,6 +26,7 @@ interface ICommand {
   version: string;
   packageJSON: any;
   sourceId: string;
+  readmeContent: string;
 }
 const publishCommandToRemote = async (
   command: ICommand,
@@ -61,7 +62,7 @@ const uploadFile = async (
   const formData = new FormData();
   formData.append(
     "file",
-    new File([readFileSync(filePath, "binary")], filename)
+    new Blob([readFileSync(filePath)], { type: "application/zip" })
   );
   const res = await fetch(API_GATEWAY + "/api/file", {
     method: "POST",
@@ -85,25 +86,19 @@ const action = async (options: { remote: boolean }) => {
 
     if (isLogin) {
       // login success
-      const { cmdName, distDir, pkg } = await build();
+      const { cmdName, distDir, pkg, readmeContent } = await build();
       const zip = new AdmZip();
       zip.addLocalFolder(distDir);
-      const zipPath = resolve(
-        distDir,
-        "../",
-        sanitize(cmdName, { replacement: "-" }) + ".zip"
-      );
+      const filename = sanitize(cmdName, { replacement: "-" }) + ".zip";
+      const zipPath = resolve(tmpdir(), filename);
+
       zip.writeZip(zipPath, async (error) => {
         if (error) {
           Log.error("zip error: " + error.message);
         } else {
           Log.info("zip success");
           // 上传
-          const { success, data } = await uploadFile(
-            cookie,
-            zipPath,
-            basename(zipPath, ".zip")
-          );
+          const { success, data } = await uploadFile(cookie, zipPath, filename);
           if (!success) {
             return Log.error("upload command error");
           } else {
@@ -113,6 +108,7 @@ const action = async (options: { remote: boolean }) => {
                 version: pkg.version,
                 packageJSON: JSON.stringify(pkg),
                 sourceId: data.name,
+                readmeContent,
               },
               cookie
             );
