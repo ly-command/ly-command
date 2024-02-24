@@ -32,37 +32,41 @@ const install = (program: Command) => {
     .action(async (commands: string[]) => {
       const tmpdirPath = tmpdir();
       const downloads = commands.map((command) => {
+        const ora = Ora({
+          text: `installing command "${command}"`,
+          color: "yellow",
+        });
         return async () => {
-          const ora = Ora({
-            text: `installing command "${command}"`,
-            color: "yellow",
-          });
+          try {
+            ora.start();
+            const { version, name: commandName } = parse(command);
+            const { success, data: list } = await fetchCommand(commandName);
 
-          ora.start();
-          const { version, name: commandName } = parse(command);
-          const { success, data: list } = await fetchCommand(commandName);
-
-          if (!success || !list?.length) {
-            throw new Error(`not found command "${commandName}"`);
-          }
-          const latest = list[0];
-          let sourceId = latest.sourceId;
-          if (version !== "latest") {
-            const cmd = list.find((cmd: any) => cmd.version === version);
-            if (!cmd) {
-              throw new Error(`not found version ${version}`);
+            if (!success || !list?.length) {
+              throw new Error(`not found command "${commandName}"`);
             }
-            sourceId = cmd.sourceId;
-          }
-          const zipPath = resolve(tmpdirPath, sourceId);
+            const latest = list[0];
+            let sourceId = latest.sourceId;
+            if (version !== "latest") {
+              const cmd = list.find((cmd: any) => cmd.version === version);
+              if (!cmd) {
+                throw new Error(`not found version ${version}`);
+              }
+              sourceId = cmd.sourceId;
+            }
+            const zipPath = resolve(tmpdirPath, sourceId);
 
-          await downloadFile(`${API_GATEWAY}/api/file/${sourceId}`, zipPath);
-          const zip = new AdmZip(zipPath);
-          zip.extractAllTo(
-            resolve(rootStore.UserCommands.USER_COMMAND_DIR, commandName),
-            true
-          );
-          ora.succeed(`installed command "${command}"`);
+            await downloadFile(`${API_GATEWAY}/api/file/${sourceId}`, zipPath);
+            const zip = new AdmZip(zipPath);
+            zip.extractAllTo(
+              resolve(rootStore.UserCommands.USER_COMMAND_DIR, commandName),
+              true
+            );
+            ora.succeed(`installed command "${command}"`);
+          } catch (e) {
+            ora.clear();
+            throw e;
+          }
         };
       });
       try {
@@ -71,7 +75,9 @@ const install = (program: Command) => {
         }
         Log.success(`install success`);
       } catch (e) {
+        terminal.red("\n");
         terminal.red(e);
+        process.exit();
       }
     });
 };
