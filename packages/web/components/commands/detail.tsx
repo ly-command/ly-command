@@ -16,7 +16,7 @@ export default function CommandDetail(props: {
     command;
   const desc = useMemo(() => {
     return `版本 ${version} • 发布于 ${dayjs(createdAt).locale("zh-cn").fromNow()} • 下载量 ${formatDownloadNum(downloadCount)}`;
-  }, [version, createdAt]);
+  }, [version, createdAt, downloadCount]);
   return (
     <div className="mt-10 ">
       <h1 className="text-xl font-bold">{commandName}</h1>

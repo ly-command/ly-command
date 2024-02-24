@@ -10,6 +10,7 @@ import { formatDownloadNum } from "@/utils/number";
 import Link from "next/link";
 
 import UserComponent from "@/common/User";
+import Search from "@/common/Search";
 
 dayjs.extend(relativeTime);
 

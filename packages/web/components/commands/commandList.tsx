@@ -125,7 +125,7 @@ export default function CommandList(props: {
           <TableColumn key={"none"}>{""}</TableColumn>
         )}
       </TableHeader>
-      <TableBody>
+      <TableBody emptyContent={"无数据"}>
         {commands.map((command) => (
           <TableRow key={command.commandName}>
             {(columnKey) => (
